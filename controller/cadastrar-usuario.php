@@ -1,13 +1,17 @@
 <?php
 require_once '../model/Usuario.php';
 
+
 $nome = $_POST['nome'];
 $email = $_POST['email'];
 
 //CRIPTOGRAFANDO A SENHA
 $cript = password_hash($_POST['senha'], PASSWORD_BCRYPT, ['cost' => 12]);
 
+//RECEBENDO A SENHA CRIPTOGRAFADA
 $senha = $cript;
+
+//STATUS RECEBE VALOR 0 PORQUE AINDA NÃO O FOI VERIFICADO O EMAIL DO USUÁRIO, QUANDO O USUÁRIO RECEBER O EMAIL DE VERIFICAÇÃO E CLICAR NO LINK SEU VALOR SERÁ ALTERADO PARA 1.
 $status = 0;
 
 $usuario = new Usuario();
@@ -25,17 +29,19 @@ if ($usuarios['email'] == $email) {
 
 //SE O EMAIL NÃO ESTIVER CADASTRADO, ENTAO O USUARIO É CADASTRADO
 if (empty($usuarios)) {
+	//METODO DE ADICIONAR USUÁRIO DA CLASSE USUARIO
 	$usuario->addUsuario($nome, $email, $senha, $status);
+
 	$confirmarId = $usuario->listarTodoOsUsuariosPorEmail($email);
 	$id = $confirmarId['id'];
 
-	// Para quem vai o e-mail 
+	// PARA QUEM VAI O EMAIL 
 	//$email = "caiohenrique.programador@gmail.com";
 	$to = "<$email>" . ", ";
 	//$to .= "Outro Fulano(opcional) <email@provedor.com.br>" . ", ";
-	// Assunto da Mensagem
+	// ASSUNTO DA MENSAGEM
 	$assunto = "Cadastro Sistema CRUD";
-	// Corpo da Mensagem   
+	// CORPO DA MENSAGEM   
 	$mensagem = "
 	<html>   				
 	<body>				
@@ -57,7 +63,7 @@ if (empty($usuarios)) {
 	$headers .= "Content-type: text/html; charset=iso-8859-1\n";   
 	$headers .= "From: Sistema CRUD <email@provedor.com.br>\n";   
 	$headers .= "Return-Path: <email@provedor.com.br>\n";
-	//Envio o Email   
+	//ENVIO DO EMAIL   
 	mail($to,$assunto,$mensagem, $headers);
 
 	//MENSAGEM DE SUCESSO

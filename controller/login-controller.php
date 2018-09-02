@@ -16,7 +16,7 @@ if (isset($_POST['email']) && isset($_POST['senha'])) {
 		if (password_verify($senha,$resultado['senha'])) {
 			//SE O EMAIL FOI CONFIRMADO
 			if($resultado['status'] == 1){
-				//ATRIBUINDO VALORES ÀS VARIAVEIS GLOBAIS
+				//ATRIBUINDO VALORES ÀS VARIAVEIS GLOBAIS SESSION
 				$_SESSION['usuarioId'] = $resultado['id'];
 				$_SESSION['usuarioNome'] = $resultado['nome'];
 				$_SESSION['usuarioEmail'] = $resultado['email'];
