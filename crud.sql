@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `status`) VALUES
-(1, 'Caio', 'caio@gmail.com', '202cb962ac59075b964b07152d234b70', 1);
+(1, 'Caio', 'caio@gmail.com', '$2y$12$yDjvfN5lqVHgnQBMANaPievKBXQfbDGNrWRf9Aayn.6GuaoIP9Q5S', 1);
 
 -- --------------------------------------------------------
 
