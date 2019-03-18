@@ -1,24 +1,13 @@
 <?php
-require_once 'Conexao.php';
+//IMPORTANDO CLASSE CONEXAO
+require_once("BD/Conexao.php");
 
 class Lembrete {
 
-	private function getConexao(){
-        //INSTANCIANDO OBJETO DA CLASSE CONEXÃO
-        $conexao = new Conexao();
-        /*
-            MÉTODO DA CLASSE CONEXÃO, QUE ATRIBUI A UMA VARIÁVEL DA CLASSE CONEXÃO,
-            OS DADOS NECESSÁRIOS PARA A CONEXÃO COM O BANCO DE DADOS
-        */
-        $conexao->conectar();
-        //ATRIBUINDO À VARIÁVEL $pdo OS DADOS DA CONEXÃO
-        $pdo = $conexao->getPdo();
-        //RETORNANDO ESSES DADOS DA CONEXÃO
-        return $pdo;
-    }
-
     public function listarTodosOsLembretes($usuarioid){
-    	$pdo = $this->getConexao();
+    	//RECEBENDO A CONEXAO COMO BANCO
+        $con = new Conexao();
+        $pdo = $con->getPdo();
 
     	$listar = $pdo->prepare("SELECT * FROM lembretes WHERE usuario_id=:usuarioid");
     	$listar->bindValue(":usuarioid",$usuarioid);
@@ -29,7 +18,9 @@ class Lembrete {
     }
 
     public function listarTodosOsLembretesPorId($id){
-    	$pdo = $this->getConexao();
+    	//RECEBENDO A CONEXAO COMO BANCO
+        $con = new Conexao();
+        $pdo = $con->getPdo();
 
     	$listar = $pdo->prepare("SELECT * FROM lembretes WHERE id=:id");
     	$listar->bindValue(":id",$id);
@@ -40,7 +31,9 @@ class Lembrete {
     }
 
     public function deletarLembrete($id){
-    	$pdo = $this->getConexao();
+    	//RECEBENDO A CONEXAO COMO BANCO
+        $con = new Conexao();
+        $pdo = $con->getPdo();
 
     	$deletar = $pdo->prepare("DELETE FROM lembretes WHERE id=:id");
     	$deletar->bindValue(":id",$id);
@@ -48,7 +41,9 @@ class Lembrete {
     }
 
     public function adicionarLembrete($descricao,$usuarioid){
-    	$pdo = $this->getConexao();
+    	//RECEBENDO A CONEXAO COMO BANCO
+        $con = new Conexao();
+        $pdo = $con->getPdo();
 
     	$inserir = $pdo->prepare("INSERT INTO lembretes(descricao,usuario_id) VALUES(:descricao,:usuarioid)");
     	$inserir->bindValue(":descricao",$descricao);
@@ -57,7 +52,9 @@ class Lembrete {
     }
 
     public function atualizarLembrete($id,$descricao){
-    	$pdo = $this->getConexao();
+    	//RECEBENDO A CONEXAO COMO BANCO
+        $con = new Conexao();
+        $pdo = $con->getPdo();
 
     	$inserir = $pdo->prepare("UPDATE lembretes SET descricao=:descricao WHERE id=:id");
     	$inserir->bindValue(":descricao",$descricao);

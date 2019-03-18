@@ -1,37 +1,65 @@
 <?php
-require_once 'Conexao.php';
+//IMPORTANDO CLASSE CONEXAO
+require_once("BD/Conexao.php");
 
 class Usuario {
-	
-	private function getConexao(){
-        //INSTANCIANDO OBJETO DA CLASSE CONEXÃO
-        $conexao = new Conexao();
-        /*
-            MÉTODO DA CLASSE CONEXÃO, QUE ATRIBUI A UMA VARIÁVEL DA CLASSE CONEXÃO,
-            OS DADOS NECESSÁRIOS PARA A CONEXÃO COM O BANCO DE DADOS
-        */
-        $conexao->conectar();
-        //ATRIBUINDO À VARIÁVEL $pdo OS DADOS DA CONEXÃO
-        $pdo = $conexao->getPdo();
-        //RETORNANDO ESSES DADOS DA CONEXÃO
-        return $pdo;
+    private $nome;
+    private $email;
+    private $senha;
+    private $status;
+
+    /* Getters and Setters ------------------------------------------*/
+    public function getNome(){
+        return $this->nome;
     }
 
-    public function addUsuario($nome,$email,$senha,$status){
+    public function getEmail(){
+        return $this->email;
+    }
+
+    public function getSenha(){
+        return $this->senha;
+    }
+
+    public function getStatus(){
+        return $this->status;
+    }
+
+    public function setNome($nome){
+        $this->nome = $nome;
+    }
+
+    public function setEmail($email){
+        $this->email = $email;
+    }
+
+    public function setSenha($senha){
+        $this->senha = $senha;
+    }
+
+    public function setStatus($status){
+        $this->status = $status;
+    }
+    /* End Getters and Setters------------------------------------------- */
+
+    public function addUsuario(){
     	//RECEBENDO A CONEXAO COMO BANCO
-    	$pdo = $this->getConexao();
+    	$con = new Conexao();
+        $pdo = $con->getPdo();
 
     	//QUERY PARA INSERIR USUARIO NO BANCO
     	$inserir = $pdo->prepare("INSERT INTO usuarios(nome,email,senha,status) VALUES(:nome,:email,:senha,:status)");
-    	$inserir->bindValue(":nome", $nome);
-    	$inserir->bindValue(":email", $email);
-    	$inserir->bindValue(":senha", $senha);
-    	$inserir->bindValue(":status", $status);
+    	$inserir->bindValue(":nome", $this->getNome());
+    	$inserir->bindValue(":email", $this->getEmail());
+    	$inserir->bindValue(":senha", $this->getSenha());
+    	$inserir->bindValue(":status", $this->getStatus());
     	$inserir->execute();
     }
 
     public function listarTodoOsUsuariosPorEmail($email){
-    	$pdo = $this->getConexao();
+    	//RECEBENDO A CONEXAO COMO BANCO
+        $con = new Conexao();
+        $pdo = $con->getPdo();
 
         $listar = $pdo->prepare("SELECT * FROM usuarios WHERE email=:email");
         $listar->bindValue(":email",$email);
@@ -42,7 +70,9 @@ class Usuario {
     }
 
     public function listarTodoOsUsuarios(){
-        $pdo = $this->getConexao();
+        //RECEBENDO A CONEXAO COMO BANCO
+        $con = new Conexao();
+        $pdo = $con->getPdo();
 
         $listar = $pdo->prepare("SELECT * FROM usuarios");
         $listar->execute();
@@ -52,7 +82,9 @@ class Usuario {
     }
 
     public function confirmarCadastro($id){
-        $pdo = $this->getConexao();
+        //RECEBENDO A CONEXAO COMO BANCO
+        $con = new Conexao();
+        $pdo = $con->getPdo();
 
         $confirmar = $pdo->prepare("UPDATE usuarios SET status=1 WHERE id=:id");
         $confirmar->bindValue(":id",$id);

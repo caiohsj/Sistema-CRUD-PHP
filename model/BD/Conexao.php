@@ -14,7 +14,7 @@ class Conexao {
 	}
 
 	//MÉTODO QUE FAZ A CONEXAO COM O BANCO DE DADOS
-	public function conectar(){   
+	public function __construct(){   
     try{
 	    $pdo = new PDO("mysql:host=localhost;dbname=crud","root","");
 	    //ATRIBUINDO A VARIÁVEL $pdo OS DADOS DA CONEXÃO

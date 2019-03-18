@@ -1,5 +1,5 @@
 <?php
-require_once '../model/Usuario.php';
+require_once("../model/Usuario.php");
 
 
 $nome = $_POST['nome'];
@@ -29,8 +29,12 @@ if ($usuarios['email'] == $email) {
 
 //SE O EMAIL NÃO ESTIVER CADASTRADO, ENTAO O USUARIO É CADASTRADO
 if (empty($usuarios)) {
+	$usuario->setNome($nome);
+	$usuario->setEmail($email);
+	$usuario->setSenha($senha);
+	$usuario->setStatus($status);
 	//METODO DE ADICIONAR USUÁRIO DA CLASSE USUARIO
-	$usuario->addUsuario($nome, $email, $senha, $status);
+	$usuario->addUsuario();
 
 	$confirmarId = $usuario->listarTodoOsUsuariosPorEmail($email);
 	$id = $confirmarId['id'];
