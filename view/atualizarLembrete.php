@@ -1,14 +1,13 @@
 <?php
 	session_start();
-	require_once '../model/Lembrete.php';
+	require_once("../model/Lembrete.php");
+	require_once("../model/Usuario.php");
 
-	if ($_SESSION['logado'] == 0) {
-                        
-        echo "<meta HTTP-EQUIV='Refresh' CONTENT='0;"
-        . "URL=../'>";
+	//Se não está logado
+	if(Usuario::verifyLogin() === false){
+			//Redirecionado para inicial da conta
+		    echo "<meta HTTP-EQUIV='Refresh' CONTENT='0;";
 	}
-
-	if ($_SESSION['logado'] == 1) {
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,7 +20,7 @@
 <body>
 	<div class="container">
 		<nav class="navbar navbar-dark bg-dark mb-4">
-  			<span class="navbar-brand mb-0 h1"><?php echo $_SESSION['usuarioNome'];?></span>
+  			<span class="navbar-brand mb-0 h1"><?php echo $_SESSION["nomeUsuario"];?></span>
   			<a class="navbar-brand mb-0 h1" href="../controller/deslogar-controller.php">Sair</a>
 		</nav>
 		<div class="row">
@@ -35,16 +34,16 @@
 					  </thead>
 				</table>
 				<?php
-					$id = $_GET['id'];
+					$id = $_GET["id"];
 					$lembrete = new Lembrete();
-					$lembretes = $lembrete->listarTodosOsLembretesPorId($id);
+					$lembrete->loadById($id);
 				?>
-				<form method="post" action="../controller/atualizar-lembrete-controller.php?id=<?php echo $lembretes['id'];?>">
+				<form method="post" action="../controller/atualizar-lembrete-controller.php">
 					<div class="form-group row">
-						<input type="hidden" name="usuarioid" value="<?php echo $_SESSION['usuarioId'];?>">
+						<input type="hidden" name="id" value="<?php echo $lembrete->getId();?>">
 					    <label for="inputDescricao" class="col-sm-2 col-form-label">Descricao</label>
 					    <div class="col-sm-8">
-					    	<textarea type="text" name="descricao" class="form-control" id="inputDescricao" placeholder="Digite aqui a descricao do seu lembrete" ><?php echo $lembretes['descricao'];?></textarea>
+					    	<textarea type="text" name="descricao" class="form-control" id="inputDescricao" placeholder="Digite aqui a descricao do seu lembrete" ><?php echo $lembrete->getDescricao();?></textarea>
 					    </div>
 						<div class="col-sm-1">
 					    	<input type="submit" class="btn btn-primary" value="Atualizar">
@@ -57,6 +56,3 @@
 	</div>
 </body>
 </html>
-<?php
-	}
-?>

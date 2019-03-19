@@ -1,14 +1,14 @@
 <?php
 	session_start();
-	require_once '../model/Lembrete.php';
+	require_once("../model/Lembrete.php");
+	require_once("../model/Usuario.php");
 
-	if ($_SESSION['logado'] == 0) {
-                        
-        echo "<meta HTTP-EQUIV='Refresh' CONTENT='0;"
-        . "URL=../'>";
+	//	Se não está logado
+	if(Usuario::verifyLogin() === false){
+		//	Redirecionado para inicial da conta
+	    echo "<meta HTTP-EQUIV='Refresh' CONTENT='0;"
+	        . "URL=../'>";
 	}
-
-	if ($_SESSION['logado'] == 1) {
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,7 +21,7 @@
 <body>
 	<div class="container">
 		<nav class="navbar navbar-dark bg-dark mb-4">
-  			<span class="navbar-brand mb-0 h1"><?php echo $_SESSION['usuarioNome'];?></span>
+  			<span class="navbar-brand mb-0 h1"><?php echo $_SESSION["nomeUsuario"];?></span>
   			<a class="navbar-brand mb-0 h1" href="../controller/deslogar-controller.php">Sair</a>
 		</nav>
 		<div class="row">
@@ -35,18 +35,21 @@
 					  </thead>
 					  <tbody>
 					  	<?php
-					  		$usuarioid = $_SESSION['usuarioId'];
+					  		//	Recebendo o id do usuario que está logado
+					  		$idUsuario = $_SESSION["idUsuario"];
 							$lembrete = new Lembrete();
-							$lembretes = $lembrete->listarTodosOsLembretes($usuarioid);
 
-							if(isset($lembretes)){
-					  			foreach ($lembretes as $listarLembretes){
+							//	Listando os lembretes por usuario
+							$results = $lembrete->listByIdUsuario($idUsuario);
+
+							// Se tem algum lembrete então é feito o loop para mostrá-los
+							if(isset($results)){
+					  			foreach ($results as $lembretes){
 					  	?>
 					    <tr class="row">
-					      <!--<th scope="row" class="col-md-2"><?=$listarLembretes['id'];?></th>-->
-					      <td class="col-md-9 ml-1"><?=$listarLembretes['descricao'];?></td>
-					      <td class="col-md-1"><a href="atualizarLembrete.php?id=<?php echo $listarLembretes['id'];?>">Editar</a></td>
-					      <td class="col-md-1"><a href="../controller/excluir-lembrete-controller.php?id=<?php echo $listarLembretes['id'];?>">Excluir</a></td>
+					      <td class="col-md-9 ml-1"><?=$lembretes['descricao'];?></td>
+					      <td class="col-md-1"><a href="atualizarLembrete.php?id=<?php echo $lembretes['id'];?>">Editar</a></td>
+					      <td class="col-md-1"><a href="../controller/excluir-lembrete-controller.php?id=<?php echo $lembretes['id'];?>">Excluir</a></td>
 					    </tr>
 					    <?php
 					    		}
@@ -56,7 +59,7 @@
 					    ?>
 					    <tr class="row">
 					    	<td class="col-md-2"></td>
-					     	<td class="col-md-10">Clique no botao +, que está acima para adicionar um lembrete</td>
+					     	<td class="col-md-10">Clique no botao +, que está acima, para adicionar um lembrete</td>
 					    </tr>
 					    <?php
 					    	}
@@ -69,6 +72,3 @@
 	</div>
 </body>
 </html>
-<?php
-	}
-?>

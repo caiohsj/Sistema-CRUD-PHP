@@ -1,14 +1,13 @@
 <?php
 	session_start();
-	require_once '../model/Lembrete.php';
+	require_once("../model/Lembrete.php");
+	require_once("../model/Usuario.php");
 
-	if ($_SESSION['logado'] == 0) {
-                        
-        echo "<meta HTTP-EQUIV='Refresh' CONTENT='0;"
-        . "URL=../'>";
+	if(Usuario::verifyLogin() === false){
+		//Redirecionado para inicial da conta
+	    echo "<meta HTTP-EQUIV='Refresh' CONTENT='0;"
+	        . "URL=../'>";
 	}
-
-	if ($_SESSION['logado'] == 1) {
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,7 +20,7 @@
 <body>
 	<div class="container">
 		<nav class="navbar navbar-dark bg-dark mb-4">
-  			<span class="navbar-brand mb-0 h1"><?php echo $_SESSION['usuarioNome'];?></span>
+  			<span class="navbar-brand mb-0 h1"><?php echo $_SESSION["nomeUsuario"];?></span>
   			<a class="navbar-brand mb-0 h1" href="../controller/deslogar-controller.php">Sair</a>
 		</nav>
 		<div class="row">
@@ -36,7 +35,6 @@
 				</table>
 				<form method="post" action="../controller/adicionar-lembrete-controller.php">
 					<div class="form-group row">
-						<input type="hidden" name="usuarioid" value="<?php echo $_SESSION['usuarioId'];?>">
 					    <label for="inputDescricao" class="col-sm-2 col-form-label">Descricao</label>
 					    <div class="col-sm-8">
 					    	<textarea type="text" name="descricao" class="form-control" id="inputDescricao" placeholder="Digite aqui a descricao do seu lembrete"></textarea>
@@ -52,6 +50,3 @@
 	</div>
 </body>
 </html>
-<?php
-	}
-?>
